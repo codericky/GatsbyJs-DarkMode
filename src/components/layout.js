@@ -1,50 +1,49 @@
-/**
- * Layout component that queries for data
- * with Gatsby's useStaticQuery component
- *
- * See: https://www.gatsbyjs.com/docs/use-static-query/
- */
+import React, { useState } from 'react'
+import styled, { ThemeProvider } from 'styled-components'
+import PropTypes from 'prop-types'
 
-import React from "react"
-import PropTypes from "prop-types"
-import { useStaticQuery, graphql } from "gatsby"
-
+// import header and footer menu
 import Header from "./header"
-import "./layout.css"
+import Footer from "./footer"
+
+
+// import dark and light
+import lightTheme from '../themes/light'
+import darkTheme from '../themes/dark'
+
+import './styles/nomalize.css'
+
+
+const Container = styled.div`
+  min-height: 100vh;
+  background-color: ${props => props.theme.colors.background};
+  color: ${props => props.theme.colors.textColor};
+  transition: all 0.5s ease-out;
+  padding:40px;
+`
 
 const Layout = ({ children }) => {
-  const data = useStaticQuery(graphql`
-    query SiteTitleQuery {
-      site {
-        siteMetadata {
-          title
-        }
-      }
+  let localIsDark
+
+  if (typeof window !== 'undefined') {
+    if (localStorage.getItem('isDark') === 'false') {
+      localIsDark = false
+    } else {
+      localIsDark = true
     }
-  `)
+    console.log(localIsDark ? 'dark mode' : 'light mode')
+  }
+
+  const [isDark, setIsDark] = useState(localIsDark)
 
   return (
-    <>
-      <Header siteTitle={data.site.siteMetadata?.title || `Title`} />
-      <div
-        style={{
-          margin: `0 auto`,
-          maxWidth: 960,
-          padding: `0 1.0875rem 1.45rem`,
-        }}
-      >
+    <ThemeProvider theme={isDark ? darkTheme : lightTheme}>
+      <Container>
+        <Header isDark={isDark} setIsDark={setIsDark} />
         <main>{children}</main>
-        <footer
-          style={{
-            marginTop: `2rem`,
-          }}
-        >
-          © {new Date().getFullYear()}, Built with
-          {` `}
-          <a href="https://www.gatsbyjs.com">Gatsby</a>
-        </footer>
-      </div>
-    </>
+        <Footer isDark={isDark} setIsDark={setIsDark} />
+      </Container>
+    </ThemeProvider>
   )
 }
 
@@ -53,3 +52,4 @@ Layout.propTypes = {
 }
 
 export default Layout
+

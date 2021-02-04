@@ -1,42 +1,73 @@
-import { Link } from "gatsby"
-import PropTypes from "prop-types"
-import React from "react"
+import { Link } from 'gatsby'
+import React from 'react'
+import styled from 'styled-components'
 
-const Header = ({ siteTitle }) => (
-  <header
-    style={{
-      background: `rebeccapurple`,
-      marginBottom: `1.45rem`,
-    }}
-  >
-    <div
-      style={{
-        margin: `0 auto`,
-        maxWidth: 960,
-        padding: `1.45rem 1.0875rem`,
-      }}
-    >
-      <h1 style={{ margin: 0 }}>
-        <Link
-          to="/"
-          style={{
-            color: `white`,
-            textDecoration: `none`,
-          }}
-        >
-          {siteTitle}
-        </Link>
-      </h1>
-    </div>
-  </header>
+import Icon from './icon'
+
+const links = [
+  {
+    title: 'Home',
+    href: '/',
+  },
+  {
+    title: 'About',
+    href: '/about',
+  },
+  {
+    title: 'Contact',
+    href: '/contact',
+  },
+]
+
+const Container = styled.div`
+  max-width: 100vw;
+  height: 16vh;
+  margin: 0 1rem;
+  display: flex;
+  align-items: center;
+  font-family:Sriracha;
+  justify-content: space-between;
+  background-color: ${props => props.theme.colors.background};
+  transition: all 0.5s ease-out;
+  @media only screen and (max-width: 768px) {
+    margin: 0 2rem;
+  }
+`
+
+const Links = styled.ul`
+  list-style-type: none;
+  margin: 0;
+  cursor: default;
+  text-align: center;`
+
+const LinksItem = styled.li`
+  padding: 0;
+  margin: 0;
+  display: inline-block;
+  margin-left: 18px;
+  font-size:23px;
+  cursor: pointer;
+  color: ${props => props.theme.colors.textColor};
+  user-select: none;
+`
+
+const Header = ({ isDark, setIsDark }) => (
+  <Container>
+    <Links>
+      {links.map(link => (
+        <LinksItem key={link.href}>
+          <Link
+            style={{ color: 'inherit', textDecoration: 'none' }}
+            to={link.href}
+          >
+            {link.title}
+          </Link>
+        </LinksItem>
+      ))}
+    </Links>
+    <br />
+    <Icon isDark={isDark} setIsDark={setIsDark} />
+  </Container>
 )
-
-Header.propTypes = {
-  siteTitle: PropTypes.string,
-}
-
-Header.defaultProps = {
-  siteTitle: ``,
-}
 
 export default Header
